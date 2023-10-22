@@ -1,0 +1,8 @@
++ 23/10/2023:
+	+ Siamese net with ResNet16 backbone performs good, there is clear separation in similarity score between two classes (only tested on one product though, need to test on others as well) => Do hypothesis test to prove that the similarity score is separable, we can test with other backbone to boost training time
+	+ Table of Score has too high linear correlated features (some scores are bounded (-1, 1), some score are not (0, inf)) => Accuracy on discriminator are not good => Check histogram to analyze structure of the data
+	+ We can separated the scores into two tables (bounded and unbounded), fit the model separately:
+		+ Unbounded (seems like they are just log-scale of a quotient, while others are straight up quotients) => RF accuracy increased to 76%, other still around 60%
+		+ Bounded: slight increases in RF accuracy, SVM accuracy remains unchanged, logit regression slight decreases
+	+ Uses MLP but results return one class only (this method seems too excessive)
+	+ 
