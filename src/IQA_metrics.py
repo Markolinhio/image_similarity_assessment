@@ -13,16 +13,19 @@ from tqdm import tqdm
 from utils import *
 import time
 
-def table_of_score(model_image_dict, image_dict):
-    model_image_path, model_label = list(model_image_dict.items())[0]
-    model_image = cv2.imread(model_image_path, cv2.IMREAD_COLOR)
+def table_of_score(model_image_list, image_dict):
     score_list = []
-    metrics = ['rmse', 'psnr', 'fsim', 'ssim', 'uiq', 'sam', 'sre']
-    
-    for image_path, label in tqdm(image_dict.items()):
+    metrics = ['psnr', 'fsim', 'ssim', 'uiq', 'sam', 'sre'][3:] # remove 'rmse' value because other metrics are based on it
+    for i in tqdm(range(len(image_dict.items()))):
+        image_path, label = list(image_dict.items())[i]
         #start = time.time()
         image = cv2.imread(image_path, cv2.IMREAD_COLOR)
-        
+
+        # Load model image
+        model_image_path = model_image_list[i]
+        model_label = 1
+        model_image = cv2.imread(model_image_path, cv2.IMREAD_COLOR)
+
         scores = []
         for metric in metrics:
             try:
