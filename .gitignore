@@ -160,6 +160,6 @@ cython_debug/
 #.idea/
 data/
 References/Papers
-agmented_data/
 result/table_of_scores
-
+models_unaugmented/
+result/
