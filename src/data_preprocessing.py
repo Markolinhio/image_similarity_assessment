@@ -12,7 +12,7 @@ import json
 from sklearn.decomposition import PCA
 from sklearn import preprocessing
 import albumentations as albumentations
-from visualize_attributes import * 
+from data_analysis import * 
 from utils import *
 
 

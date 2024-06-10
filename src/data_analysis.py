@@ -213,7 +213,7 @@ def draw_class_distribution_histogram(data_path):
         good_list_count.append(good_count)
         defect_list_count.append(defects_count)
 
-    print(good_list_count, defect_list_count)
+    #print(good_list_count, defect_list_count)
     plt.figure(figsize=(24, 12), layout='tight')
     plt.bar(products, good_list_count, color='r')
     plt.bar(products, defect_list_count, bottom=good_list_count, color='b')

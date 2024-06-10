@@ -143,7 +143,8 @@ class ProductDataset(Dataset):
                 image_1,
                 image_2,
                 torch.from_numpy(np.array([label_1, label_2])),
-                torch.from_numpy(np.array([int(label_1 != label_2)], dtype=np.float32)),
+                torch.from_numpy(
+                    np.array([int(label_1 != label_2)], dtype=np.float32)),
             )
 
     def __len__(self):
@@ -214,7 +215,8 @@ class ContrastiveLoss(torch.nn.Module):
 
     def forward(self, output1, output2, label):
         # Calculate the euclidean distance and calculate the contrastive loss
-        euclidean_distance = F.pairwise_distance(output1, output2, keepdim=True)
+        euclidean_distance = F.pairwise_distance(
+            output1, output2, keepdim=True)
         loss_contrastive = torch.mean(
             (1 - label) * torch.pow(euclidean_distance, 2)
             + (label)
@@ -246,7 +248,8 @@ def model_train(
         model.load_state_dict(torch.load(resume_model_path))
     loss = ContrastiveLoss()
     optimizer = optim.Adam(model.parameters(), lr=lr)
-    scheduler = optim.lr_scheduler.StepLR(optimizer, step_size=step_size, gamma=0.5)
+    scheduler = optim.lr_scheduler.StepLR(
+        optimizer, step_size=step_size, gamma=0.5)
 
     torch.cuda.empty_cache()
 
@@ -338,11 +341,15 @@ def inference(
     for i in range(len(test_dataloader)):
         _, test_image, test_label, _ = next(iter(test_dataloader))
 
-        output_1, output_2 = model(model_image.to(device), test_image.to(device))
-        euclidean_distance = F.pairwise_distance(output_1, output_2, keepdim=True)
+        output_1, output_2 = model(
+            model_image.to(device), test_image.to(device))
+        euclidean_distance = F.pairwise_distance(
+            output_1, output_2, keepdim=True)
 
-        image_1 = np.array(model_image[0].permute(1, 2, 0) * 255, dtype=np.uint8)
-        test_image = np.array(test_image[0].permute(1, 2, 0) * 255, dtype=np.uint8)
+        image_1 = np.array(model_image[0].permute(
+            1, 2, 0) * 255, dtype=np.uint8)
+        test_image = np.array(test_image[0].permute(
+            1, 2, 0) * 255, dtype=np.uint8)
         label_1 = "good"
         label_2 = "defect" if test_label.numpy()[0][1] == 0 else "good"
         label = "same class" if label_1 == label_2 else "different class"
@@ -355,7 +362,8 @@ def inference(
             ax[1].imshow(test_image[:, :, ::-1])
             ax[1].set_xlabel(label_2, weight="bold", fontsize=20)
             # ax[1].axis('off')
-            fig.suptitle("Dissimilarity score: " + str(euclidean_distance.item()))
+            fig.suptitle("Dissimilarity score: " +
+                         str(euclidean_distance.item()))
             # fig.show()
         result.append(
             np.array(
